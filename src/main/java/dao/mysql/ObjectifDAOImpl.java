@@ -46,7 +46,7 @@ public class ObjectifDAOImpl implements ObjectifDAO {
     }
 
     public List<Objectif> findAll(){
-        ArrayList<Objectif> listeObjectif = new ArrayList<Objectif>();
+        ArrayList<Objectif> listeObjectif = new ArrayList<>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
@@ -87,7 +87,6 @@ public class ObjectifDAOImpl implements ObjectifDAO {
             stm.setInt(2, objectif.getId());
 
             stm.executeUpdate();
-
         }catch (SQLException e){
             e.printStackTrace();
             return null;
@@ -101,7 +100,6 @@ public class ObjectifDAOImpl implements ObjectifDAO {
             stm.setInt(1, objectif.getId());
 
             stm.executeUpdate();
-
         }catch (SQLException e){
             e.printStackTrace();
             return 0;

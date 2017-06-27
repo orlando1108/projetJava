@@ -49,7 +49,7 @@ public class FormateurDAOImpl implements FormateurDAO {
     }
 
     public List<Formateur> findAll(){
-        List<Formateur> listFormateur = new ArrayList<Formateur>();
+        List<Formateur> listFormateur = new ArrayList<>();
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
 
             ResultSet result = stm.executeQuery();

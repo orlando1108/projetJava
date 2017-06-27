@@ -2,6 +2,7 @@ package dao.mysql;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import dao.StagiaireDAO;
+import db.ConnectionFactory;
 import db.DbConnection;
 import modele.Stagiaire;
 
@@ -17,7 +18,9 @@ import java.util.List;
  */
 public class StagiaireDAOImpl implements StagiaireDAO {
 
-    private Connection con = new DbConnection().getCon();
+    private Connection con = ConnectionFactory.getConnection(
+            ConnectionFactory.CERFA
+    );
 
     private final String selectQuery = "SELECT * FROM stagiaire INNER JOIN personne ON stagiaire.idStagiaire = personne.idPersonne";
     private final String insertPersonneQuery = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
@@ -49,7 +52,7 @@ public class StagiaireDAOImpl implements StagiaireDAO {
     }
 
     public List<Stagiaire> findAll(){
-        List<Stagiaire> listStagiaire = new ArrayList<Stagiaire>();
+        List<Stagiaire> listStagiaire = new ArrayList<>();
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
 
             ResultSet result = stm.executeQuery();
