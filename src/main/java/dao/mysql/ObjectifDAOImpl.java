@@ -1,5 +1,6 @@
-package dao;
+package dao.mysql;
 
+import dao.ObjectifDAO;
 import db.ConnectionFactory;
 import modele.Objectif;
 
@@ -14,22 +15,21 @@ import java.util.List;
  * Created by VTanchereau on 27/06/2017.
  */
 
-public class ObjectifDAOImpl implements ObjectifDAO{
+public class ObjectifDAOImpl implements ObjectifDAO {
 
     private Connection con = ConnectionFactory.getConnection(
             ConnectionFactory.CERFA
     );
 
     private final String selectQuery = "SELECT idObjectif, libelle FROM objectif";
-    private final String insertQuery = "INSERT INTO objectif (libelle) VALUES";
+    private final String insertQuery = "INSERT INTO objectif (libelle) VALUES (?)";
     private final String updateQuery = "UPDATE objectif SET libelle = ? WHERE idObjectif = ?";
     private final String deleteQuery = "DELETE FROM objectif WHERE idObjectif = ?";
 
     public Objectif selectById(int id) {
         String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idObjectif = ?").toString();
         Objectif objectif = null;
-        try {
-            PreparedStatement stm = con.prepareStatement(selectQueryById);
+        try (PreparedStatement stm = con.prepareStatement(selectQueryById)){
             stm.setInt(1, id);
 
             ResultSet result = stm.executeQuery();
@@ -66,9 +66,7 @@ public class ObjectifDAOImpl implements ObjectifDAO{
     }
 
     public Objectif insert(Objectif objectif) {
-        String insertQueryConstructed = new StringBuilder().append(this.insertQuery).append(" (?);").toString();
-
-        try (PreparedStatement stm = con.prepareStatement(insertQueryConstructed)){
+        try (PreparedStatement stm = con.prepareStatement(this.insertQuery)){
             stm.setString(1, objectif.getLibelle());
 
             stm.executeUpdate();
