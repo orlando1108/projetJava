@@ -1,10 +1,9 @@
-import dao.mysql.FormateurDAOImpl;
 import dao.mysql.ObjectifDAOImpl;
-import dao.mysql.StagiaireDAOImpl;
-import modele.Formateur;
+import db.DbConnection;
 import modele.Objectif;
-import modele.Stagiaire;
 
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,5 +14,14 @@ public class Main {
 
     public static void main(String [ ] args) {
 
+        ObjectifDAOImpl objDaoImpl = new ObjectifDAOImpl();
+
+        List<Objectif> list = new ArrayList<>();
+
+        list.addAll(objDaoImpl.findAll());
+
+        list.forEach((c)-> {
+            System.out.println(c.toString());
+        });
     }
 }

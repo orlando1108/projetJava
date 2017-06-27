@@ -12,9 +12,12 @@ public class ConnectionFactory {
 
     public static Connection getConnection(String type) {
         if (CERFA.equals(type)) {
-            DbConnection con = new DbConnection();
-
-            return con.getCon();
+            try {
+                DbConnection con = new DbConnection();
+                return con.getCon();
+            }catch(DbException e){
+                e.printStackTrace();
+            }
         }
         return null;
     }

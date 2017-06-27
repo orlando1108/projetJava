@@ -46,4 +46,12 @@ public class Objectif {
         }
         return listFields;
     }
+
+    @Override
+    public String toString() {
+        return "Objectif{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                '}';
+    }
 }

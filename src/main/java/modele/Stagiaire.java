@@ -21,4 +21,6 @@ public class Stagiaire extends Personne{
         super(nom, prenom);
     }
 
+
+
 }

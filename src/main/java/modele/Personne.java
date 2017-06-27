@@ -5,10 +5,10 @@ package modele;
  */
 public class Personne {
 
-    private int id;
-    private String nom;
-    private String prenom;
-    private boolean interne;
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected boolean interne;
 
     public Personne(int id, String nom, String prenom, boolean interne) {
         this.id = id;
