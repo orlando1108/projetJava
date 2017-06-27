@@ -26,7 +26,7 @@ public class ObjectifDAOImpl implements ObjectifDAO {
     private final String updateQuery = "UPDATE objectif SET libelle = ? WHERE idObjectif = ?";
     private final String deleteQuery = "DELETE FROM objectif WHERE idObjectif = ?";
 
-    public Objectif selectById(int id) {
+    public Objectif findById(int id) {
         String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idObjectif = ?").toString();
         Objectif objectif = null;
         try (PreparedStatement stm = con.prepareStatement(selectQueryById)){
@@ -45,7 +45,7 @@ public class ObjectifDAOImpl implements ObjectifDAO {
         return objectif;
     }
 
-    public List<Objectif> selectAll(){
+    public List<Objectif> findAll(){
         ArrayList<Objectif> listeObjectif = new ArrayList<Objectif>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){

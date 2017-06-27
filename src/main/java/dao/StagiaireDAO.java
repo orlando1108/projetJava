@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface StagiaireDAO {
 
-    Stagiaire selectById(int id);
-    List<Stagiaire> selectAll();
+    Stagiaire findById(int id);
+    List<Stagiaire> findAll();
     Stagiaire insert(Stagiaire objectif);
     Stagiaire update(Stagiaire objectif);
     int delete(Stagiaire objectif);

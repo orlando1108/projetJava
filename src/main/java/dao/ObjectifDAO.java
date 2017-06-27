@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface ObjectifDAO {
 
-    Objectif selectById(int id);
-    List<Objectif> selectAll();
+    Objectif findById(int id);
+    List<Objectif> findAll();
     Objectif insert(Objectif objectif);
     Objectif update(Objectif objectif);
     int delete(Objectif objectif);

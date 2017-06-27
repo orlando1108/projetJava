@@ -14,7 +14,7 @@ public class ConnectionFactory {
         if (CERFA.equals(type)) {
             DbConnection con = new DbConnection();
 
-            return con.connection();
+            return con.getCon();
         }
         return null;
     }
