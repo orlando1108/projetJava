@@ -1,7 +1,7 @@
 package dao.impl.mysql;
 
 import dao.intf.CreneauDAO;
-import modele.Creneau;
+import modele.impl.Creneau;
 import modele.impl.Formation;
 import modele.impl.Objectif;
 import modele.impl.Specialite;

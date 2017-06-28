@@ -1,6 +1,6 @@
 package dao.intf;
 
-import modele.Creneau;
+import modele.impl.Creneau;
 
 import java.util.List;
 

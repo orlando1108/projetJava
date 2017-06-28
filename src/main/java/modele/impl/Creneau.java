@@ -1,6 +1,7 @@
-package modele;
+package modele.impl;
 
 import modele.impl.Formation;
+import modele.intf.ICreneau;
 import modele.intf.IFormateur;
 import modele.intf.IFormation;
 import modele.intf.IStagiaire;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 28/06/2017.
  */
-public class Creneau {
+public class Creneau implements ICreneau{
 
     private int id;
     private LocalDateTime dateDebut;
