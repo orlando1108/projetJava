@@ -22,7 +22,7 @@ public class FormationDAOImpl implements FormationDAO{
             ConnectionFactory.CERFA
     );
 
-    private final String selectQuery = "SELECT * FROM formation INNER JOIN Specialite ON formation.fk_specialite = Specialite.idSpecialite INNER JOIN objectif ON formation.fk_objectif = objectif.idObjectif";
+    private final String selectQuery = "SELECT * FROM formation INNER JOIN specialite ON formation.fk_specialite = specialite.idSpecialite INNER JOIN objectif ON formation.fk_objectif = objectif.idObjectif";
     private final String insertQuery = "INSERT INTO formation (nom, fk_specialite, fk_objectif) VALUES (?, ?, ?)";
     private final String updateQuery = "UPDATE formation SET nom = ?, fk_specialite = ?, fk_objectif = ? WHERE idFormation = ?";
     private final String deleteQuery = "DELETE FROM formation WHERE idFormation = ?";
