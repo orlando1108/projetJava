@@ -11,5 +11,6 @@ public interface IFormateur extends IPersonne{
 
     List<Creneau> getListCreneaux();
     void setListCreneaux(List<Creneau> listCreneaux);
-
+    boolean isInterne();
+    void setInterne(boolean interne);
 }

@@ -11,24 +11,17 @@ import java.util.List;
 public class Formateur extends Personne implements IFormateur{
 
     private List<Creneau> listCreneaux;
+    protected boolean interne;
 
     public Formateur(int id, String nom, String prenom, boolean interne) {
-        super(id, nom, prenom, interne);
+        super(id, nom, prenom);
+        this.interne = interne;
         this.listCreneaux = new ArrayList<>();
     }
 
     public Formateur(String nom, String prenom, boolean interne) {
-        super(nom, prenom, interne);
-        this.listCreneaux = new ArrayList<>();
-    }
-
-    public Formateur(int id, String nom, String prenom) {
-        super(id, nom, prenom);
-        this.listCreneaux = new ArrayList<>();
-    }
-
-    public Formateur(String nom, String prenom) {
         super(nom, prenom);
+        this.interne = interne;
         this.listCreneaux = new ArrayList<>();
     }
 
@@ -38,5 +31,13 @@ public class Formateur extends Personne implements IFormateur{
 
     public void setListCreneaux(List<Creneau> listCreneaux) {
         this.listCreneaux = listCreneaux;
+    }
+
+    public boolean isInterne() {
+        return interne;
+    }
+
+    public void setInterne(boolean interne) {
+        this.interne = interne;
     }
 }

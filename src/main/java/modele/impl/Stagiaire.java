@@ -14,27 +14,18 @@ public class Stagiaire extends Personne implements IStagiaire{
 
     private List<IFinancementStagiaire> listFinancementsStagiaires;
     private List<ICreneau> listCreneaux;
+    protected boolean interne;
 
     public Stagiaire(int id, String nom, String prenom, boolean interne) {
-        super(id, nom, prenom, interne);
+        super(id, nom, prenom);
+        this.setInterne(interne);
         this.listFinancementsStagiaires = new ArrayList<>();
         this.listCreneaux = new ArrayList<>();
     }
 
     public Stagiaire(String nom, String prenom, boolean interne) {
-        super(nom, prenom, interne);
-        this.listFinancementsStagiaires = new ArrayList<>();
-        this.listCreneaux = new ArrayList<>();
-    }
-
-    public Stagiaire(int id, String nom, String prenom) {
-        super(id, nom, prenom);
-        this.listFinancementsStagiaires = new ArrayList<>();
-        this.listCreneaux = new ArrayList<>();
-    }
-
-    public Stagiaire(String nom, String prenom) {
         super(nom, prenom);
+        this.setInterne(interne);
         this.listFinancementsStagiaires = new ArrayList<>();
         this.listCreneaux = new ArrayList<>();
     }
@@ -53,5 +44,13 @@ public class Stagiaire extends Personne implements IStagiaire{
 
     public void setListCreneaux(List<ICreneau> listCreneaux) {
         this.listCreneaux = listCreneaux;
+    }
+
+    public boolean isInterne() {
+        return interne;
+    }
+
+    public void setInterne(boolean interne) {
+        this.interne = interne;
     }
 }

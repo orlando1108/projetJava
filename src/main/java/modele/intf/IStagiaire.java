@@ -11,4 +11,6 @@ public interface IStagiaire extends IPersonne{
     void setListFinancementsStagiaires(List<IFinancementStagiaire> listFinancementsStagiaires);
     List<ICreneau> getListCreneaux();
     void setListCreneaux(List<ICreneau> listCreneaux);
+    boolean isInterne();
+    void setInterne(boolean interne);
 }

@@ -11,6 +11,4 @@ public interface IPersonne {
     void setNom(String nom);
     String getPrenom();
     void setPrenom(String prenom);
-    boolean isInterne();
-    void setInterne(boolean interne);
 }
