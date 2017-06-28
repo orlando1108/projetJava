@@ -3,7 +3,7 @@ package dao.mysql;
 import dao.FormationDAO;
 import db.ConnectionFactory;
 import modele.Formation;
-import modele.Objectif;
+import modele.impl.Objectif;
 import modele.Specialite;
 
 import java.sql.Connection;

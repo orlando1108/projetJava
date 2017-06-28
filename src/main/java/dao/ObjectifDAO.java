@@ -1,6 +1,6 @@
 package dao;
 
-import modele.Objectif;
+import modele.impl.Objectif;
 
 import java.util.List;
 

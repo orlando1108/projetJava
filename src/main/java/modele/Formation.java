@@ -1,5 +1,7 @@
 package modele;
 
+import modele.impl.Objectif;
+
 /**
  * Created by VTanchereau on 27/06/2017.
  */

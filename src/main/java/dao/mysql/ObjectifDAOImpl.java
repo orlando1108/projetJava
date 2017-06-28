@@ -2,7 +2,7 @@ package dao.mysql;
 
 import dao.ObjectifDAO;
 import db.ConnectionFactory;
-import modele.Objectif;
+import modele.impl.Objectif;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

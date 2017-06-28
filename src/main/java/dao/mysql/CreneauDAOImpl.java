@@ -4,7 +4,7 @@ import dao.CreneauDAO;
 import db.ConnectionFactory;
 import modele.Creneau;
 import modele.Formation;
-import modele.Objectif;
+import modele.impl.Objectif;
 import modele.Specialite;
 
 import java.sql.*;
