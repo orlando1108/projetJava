@@ -10,7 +10,7 @@ import java.util.List;
 public interface FormateurDAO {
     Formateur findById(int id);
     List<Formateur> findAll();
-    Formateur insert(Formateur objectif);
-    Formateur update(Formateur objectif);
-    int delete(Formateur objectif);
+    Formateur insert(Formateur formateur);
+    Formateur update(Formateur formateur);
+    int delete(Formateur formateur);
 }
