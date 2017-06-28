@@ -4,7 +4,11 @@ import dao.DAOFactory;
 import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Stagiaire;
+import modele.intf.ICreneau;
+import modele.intf.IFinancementStagiaire;
 import modele.intf.IStagiaire;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -72,5 +76,29 @@ public class ProxyStagiaire implements IStagiaire {
     public void setInterne(boolean interne) {
         this.getInstance();
         this.instance.setInterne(interne);
+    }
+
+    @Override
+    public List<IFinancementStagiaire> getListFinancementsStagiaires() {
+        this.getInstance();
+        return this.instance.getListFinancementsStagiaires();
+    }
+
+    @Override
+    public void setListFinancementsStagiaires(List<IFinancementStagiaire> listFinancementsStagiaires) {
+        this.getInstance();
+        this.instance.setListFinancementsStagiaires(listFinancementsStagiaires);
+    }
+
+    @Override
+    public List<ICreneau> getListCreneaux() {
+        this.getInstance();
+        return this.instance.getListCreneaux();
+    }
+
+    @Override
+    public void setListCreneaux(List<ICreneau> listCreneaux) {
+        this.getInstance();
+        this.instance.setListCreneaux(listCreneaux);
     }
 }

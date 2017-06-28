@@ -1,4 +1,4 @@
-package modele;
+package modele.impl;
 
 /**
  * Created by VTanchereau on 27/06/2017.

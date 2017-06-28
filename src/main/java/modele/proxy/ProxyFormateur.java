@@ -3,8 +3,11 @@ package modele.proxy;
 import dao.DAOFactory;
 import dao.DAONames;
 import dao.intf.DAO;
+import modele.impl.Creneau;
 import modele.impl.Formateur;
 import modele.intf.IFormateur;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -26,6 +29,7 @@ public class ProxyFormateur implements IFormateur {
         }
     }
 
+    @Override
     public int getId() {
         return this.id;
     }
@@ -40,7 +44,7 @@ public class ProxyFormateur implements IFormateur {
     @Override
     public String getNom() {
         getInstance();
-        return this.instance.getNom();
+        return this.getNom();
     }
 
     @Override
@@ -71,5 +75,17 @@ public class ProxyFormateur implements IFormateur {
     public void setInterne(boolean interne) {
         getInstance();
         this.instance.setInterne(interne);
+    }
+
+    @Override
+    public List<Creneau> getListCreneaux() {
+        getInstance();
+        return this.instance.getListCreneaux();
+    }
+
+    @Override
+    public void setListCreneaux(List<Creneau> listCreneaux) {
+        getInstance();
+        this.instance.setListCreneaux(listCreneaux);
     }
 }

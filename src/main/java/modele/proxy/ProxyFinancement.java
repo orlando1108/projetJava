@@ -5,6 +5,9 @@ import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Financement;
 import modele.intf.IFinancement;
+import modele.intf.IStagiaire;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -48,5 +51,17 @@ public class ProxyFinancement implements IFinancement{
     public void setLibelle(String libelle) {
         this.getInstance();
         this.instance.setLibelle(libelle);
+    }
+
+    @Override
+    public List<IStagiaire> getListStagiaires() {
+        this.getInstance();
+        return this.instance.getListStagiaires();
+    }
+
+    @Override
+    public void setListStagiaires(List<IStagiaire> listStagiaires) {
+        this.getInstance();
+        this.instance.setListStagiaires(listStagiaires);
     }
 }
