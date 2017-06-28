@@ -2,7 +2,7 @@ package dao.impl.mysql;
 
 import dao.intf.FormateurDAO;
 import db.ConnectionFactory;
-import modele.Formateur;
+import modele.impl.Formateur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

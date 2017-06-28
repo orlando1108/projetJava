@@ -1,9 +1,11 @@
-package modele;
+package modele.impl;
+
+import modele.intf.IFinancement;
 
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class Financement {
+public class Financement implements IFinancement {
     private int id;
     private String libelle;
 

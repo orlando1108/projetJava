@@ -1,10 +1,8 @@
 package dao.impl.mysql;
 
 import dao.intf.FinancementDAO;
-import db.ConnectionFactory;
-import modele.Financement;
+import modele.impl.Financement;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,10 +13,6 @@ import java.util.List;
  * Created by VTanchereau on 28/06/2017.
  */
 public class FinancementDAOImpl extends DAOImpl<Financement> implements FinancementDAO {
-
-    private Connection con = ConnectionFactory.getConnection(
-            ConnectionFactory.CERFA
-    );
 
     private final String selectQuery = "SELECT idFinancement, libelle FROM financement";
     private final String insertQuery = "INSERT INTO financement (libelle) VALUES (?)";

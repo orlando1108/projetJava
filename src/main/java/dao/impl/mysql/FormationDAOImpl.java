@@ -2,9 +2,9 @@ package dao.impl.mysql;
 
 import dao.intf.FormationDAO;
 import db.ConnectionFactory;
-import modele.Formation;
+import modele.impl.Formation;
 import modele.impl.Objectif;
-import modele.Specialite;
+import modele.impl.Specialite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

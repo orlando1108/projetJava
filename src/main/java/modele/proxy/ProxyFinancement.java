@@ -1,27 +1,27 @@
 package modele.proxy;
 
-import dao.intf.DAO;
 import dao.DAOFactory;
 import dao.DAONames;
-import modele.impl.Objectif;
-import modele.intf.IObjectif;
+import dao.intf.DAO;
+import modele.impl.Financement;
+import modele.intf.IFinancement;
 
 /**
  * Created by VTanchereau on 28/06/2017.
  */
-public class ProxyObjectif implements IObjectif{
+public class ProxyFinancement implements IFinancement{
 
     private int id;
-    private Objectif instance;
+    private Financement instance;
 
-    public ProxyObjectif(int id){
+    public ProxyFinancement(int id) {
         this.id = id;
         this.instance = null;
     }
 
     private void getInstance(){
         if (instance == null) {
-            DAO<Objectif> dao = DAOFactory.getDAO(DAONames.Specialite);
+            DAO<Financement> dao = DAOFactory.getDAO(DAONames.Financement);
             this.instance = dao.findById(this.id);
         }
     }
@@ -35,7 +35,7 @@ public class ProxyObjectif implements IObjectif{
     public void setId(int id) {
         this.id = id;
         this.getInstance();
-        this.instance.setId(id);
+        this.instance.setId(this.id);
     }
 
     @Override

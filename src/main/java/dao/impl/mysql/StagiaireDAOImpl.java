@@ -2,7 +2,7 @@ package dao.impl.mysql;
 
 import dao.intf.StagiaireDAO;
 import db.ConnectionFactory;
-import modele.Stagiaire;
+import modele.impl.Stagiaire;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,9 +1,12 @@
-package modele;
+package modele.impl;
+
+import modele.Personne;
+import modele.intf.IFormateur;
 
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class Formateur extends Personne{
+public class Formateur extends Personne implements IFormateur{
 
     public Formateur(int id, String nom, String prenom, boolean interne) {
         super(id, nom, prenom, interne);

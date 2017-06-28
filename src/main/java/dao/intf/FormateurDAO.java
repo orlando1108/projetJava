@@ -1,6 +1,6 @@
 package dao.intf;
 
-import modele.Formateur;
+import modele.impl.Formateur;
 
 import java.util.List;
 

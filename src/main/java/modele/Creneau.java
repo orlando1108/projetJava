@@ -1,5 +1,7 @@
 package modele;
 
+import modele.impl.Formation;
+
 import java.time.LocalDateTime;
 
 /**

@@ -1,10 +1,8 @@
 package dao.impl.mysql;
 
 import dao.intf.SpecialiteDAO;
-import db.ConnectionFactory;
-import modele.Specialite;
+import modele.impl.Specialite;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,10 +13,6 @@ import java.util.List;
  * Created by VTanchereau on 27/06/2017.
  */
 public class SpecialiteDAOImpl extends DAOImpl<Specialite> implements SpecialiteDAO{
-
-    private Connection con = ConnectionFactory.getConnection(
-            ConnectionFactory.CERFA
-    );
 
     private final String selectQuery = "SELECT idSpecialite, nom, code FROM specialite";
     private final String insertQuery = "INSERT INTO specialite (nom, code) VALUES (?, ?)";

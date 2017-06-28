@@ -1,24 +1,28 @@
-package modele;
+package modele.impl;
 
 import modele.impl.Objectif;
+import modele.impl.Specialite;
+import modele.intf.IFormation;
+import modele.intf.IObjectif;
+import modele.intf.ISpecialite;
 
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class Formation {
+public class Formation implements IFormation {
     private int id;
     private String nom;
-    private Specialite specialite;
-    private Objectif objectif;
+    private ISpecialite specialite;
+    private IObjectif objectif;
 
-    public Formation(int id, String nom, Specialite specialite, Objectif objectif) {
+    public Formation(int id, String nom, ISpecialite specialite, IObjectif objectif) {
         this.id = id;
         this.nom = nom;
         this.specialite = specialite;
         this.objectif = objectif;
     }
 
-    public Formation(String nom, Specialite specialite, Objectif objectif) {
+    public Formation(String nom, ISpecialite specialite, IObjectif objectif) {
         this.nom = nom;
         this.specialite = specialite;
         this.objectif = objectif;
@@ -40,19 +44,19 @@ public class Formation {
         this.nom = nom;
     }
 
-    public Specialite getSpecialite() {
+    public ISpecialite getSpecialite() {
         return specialite;
     }
 
-    public void setSpecialite(Specialite specialite) {
+    public void setSpecialite(ISpecialite specialite) {
         this.specialite = specialite;
     }
 
-    public Objectif getObjectif() {
+    public IObjectif getObjectif() {
         return objectif;
     }
 
-    public void setObjectif(Objectif objectif) {
+    public void setObjectif(IObjectif objectif) {
         this.objectif = objectif;
     }
 }

@@ -1,6 +1,6 @@
 package dao.intf;
 
-import modele.Stagiaire;
+import modele.impl.Stagiaire;
 
 import java.util.List;
 

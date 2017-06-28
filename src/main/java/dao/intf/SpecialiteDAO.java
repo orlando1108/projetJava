@@ -1,6 +1,6 @@
 package dao.intf;
 
-import modele.Specialite;
+import modele.impl.Specialite;
 
 import java.util.List;
 

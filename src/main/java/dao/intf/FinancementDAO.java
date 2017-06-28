@@ -1,6 +1,6 @@
 package dao.intf;
 
-import modele.Financement;
+import modele.impl.Financement;
 
 import java.util.List;
 

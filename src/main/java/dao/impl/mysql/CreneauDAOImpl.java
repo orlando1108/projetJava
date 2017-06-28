@@ -1,11 +1,10 @@
 package dao.impl.mysql;
 
 import dao.intf.CreneauDAO;
-import db.ConnectionFactory;
 import modele.Creneau;
-import modele.Formation;
+import modele.impl.Formation;
 import modele.impl.Objectif;
-import modele.Specialite;
+import modele.impl.Specialite;
 
 import java.sql.*;
 import java.time.LocalDateTime;

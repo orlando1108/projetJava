@@ -1,15 +1,17 @@
-package modele;
+package modele.impl;
+
+import modele.intf.ISpecialite;
 
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class Specialite {
+public class Specialite implements ISpecialite {
     private int id;
     private String nom;
     private String code;
 
-    public Specialite(int idSpecialite, String nom, String code) {
-        this.id = idSpecialite;
+    public Specialite(int id, String nom, String code) {
+        this.id = id;
         this.nom = nom;
         this.code = code;
     }
@@ -23,8 +25,8 @@ public class Specialite {
         return id;
     }
 
-    public void setId(int idSpecialite) {
-        this.id = idSpecialite;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNom() {
