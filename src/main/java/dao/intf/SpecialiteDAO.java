@@ -1,4 +1,4 @@
-package dao;
+package dao.intf;
 
 import modele.Specialite;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public interface SpecialiteDAO {
+public interface SpecialiteDAO extends DAO<Specialite> {
     Specialite findById(int id);
     List<Specialite> findAll();
     Specialite insert(Specialite specialite);

@@ -1,6 +1,6 @@
-package dao.mysql;
+package dao.impl.mysql;
 
-import dao.FormationDAO;
+import dao.intf.FormationDAO;
 import db.ConnectionFactory;
 import modele.Formation;
 import modele.impl.Objectif;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class FormationDAOImpl implements FormationDAO{
+public class FormationDAOImpl extends DAOImpl<Formation> implements FormationDAO{
 
     private Connection con = ConnectionFactory.getConnection(
             ConnectionFactory.CERFA

@@ -1,5 +1,4 @@
 package modele.impl;
-
 import modele.intf.IObjectif;
 
 /**
@@ -7,10 +6,24 @@ import modele.intf.IObjectif;
  */
 public class Objectif implements IObjectif{
 
+    private int id;
     private String libelle;
 
     public Objectif(String libelle) {
         this.libelle = libelle;
+    }
+
+    public Objectif(int id, String libelle) {
+        this.id = id;
+        this.libelle = libelle;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLibelle() {
@@ -20,5 +33,4 @@ public class Objectif implements IObjectif{
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-    
 }

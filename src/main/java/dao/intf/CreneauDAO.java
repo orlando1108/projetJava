@@ -1,4 +1,4 @@
-package dao;
+package dao.intf;
 
 import modele.Creneau;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 28/06/2017.
  */
-public interface CreneauDAO {
+public interface CreneauDAO extends DAO<Creneau> {
 
     Creneau findById(int id);
     List<Creneau> findAll();

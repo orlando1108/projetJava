@@ -5,6 +5,8 @@ package modele.intf;
  */
 public interface IObjectif {
 
+    int getId();
+    void setId(int id);
     String getLibelle();
     void setLibelle(String libelle);
 }

@@ -1,6 +1,6 @@
-package dao.mysql;
+package dao.impl.mysql;
 
-import dao.CreneauDAO;
+import dao.intf.CreneauDAO;
 import db.ConnectionFactory;
 import modele.Creneau;
 import modele.Formation;
@@ -15,11 +15,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 28/06/2017.
  */
-public class CreneauDAOImpl implements CreneauDAO {
-
-    private Connection con = ConnectionFactory.getConnection(
-            ConnectionFactory.CERFA
-    );
+public class CreneauDAOImpl extends DAOImpl<Creneau> implements CreneauDAO {
 
     private final String selectQuery =  "SELECT * FROM creneau " +
             "INNER JOIN " +

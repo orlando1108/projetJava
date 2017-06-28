@@ -1,4 +1,4 @@
-package dao;
+package dao.intf;
 
 import modele.Formateur;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public interface FormateurDAO {
+public interface FormateurDAO extends DAO<Formateur> {
     Formateur findById(int id);
     List<Formateur> findAll();
     Formateur insert(Formateur formateur);

@@ -1,6 +1,6 @@
-package dao.mysql;
+package dao.impl.mysql;
 
-import dao.SpecialiteDAO;
+import dao.intf.SpecialiteDAO;
 import db.ConnectionFactory;
 import modele.Specialite;
 
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by VTanchereau on 27/06/2017.
  */
-public class SpecialiteDAOImpl implements SpecialiteDAO{
+public class SpecialiteDAOImpl extends DAOImpl<Specialite> implements SpecialiteDAO{
 
     private Connection con = ConnectionFactory.getConnection(
             ConnectionFactory.CERFA

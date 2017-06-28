@@ -1,8 +1,8 @@
-package dao.mysql;
+package dao.impl.mysql;
 
-import dao.ObjectifDAO;
+import dao.intf.FinancementDAO;
 import db.ConnectionFactory;
-import modele.impl.Objectif;
+import modele.Financement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,23 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by VTanchereau on 27/06/2017.
+ * Created by VTanchereau on 28/06/2017.
  */
-
-public class ObjectifDAOImpl implements ObjectifDAO {
+public class FinancementDAOImpl extends DAOImpl<Financement> implements FinancementDAO {
 
     private Connection con = ConnectionFactory.getConnection(
             ConnectionFactory.CERFA
     );
 
-    private final String selectQuery = "SELECT idObjectif, libelle FROM objectif";
-    private final String insertQuery = "INSERT INTO objectif (libelle) VALUES (?)";
-    private final String updateQuery = "UPDATE objectif SET libelle = ? WHERE idObjectif = ?";
-    private final String deleteQuery = "DELETE FROM objectif WHERE idObjectif = ?";
+    private final String selectQuery = "SELECT idFinancement, libelle FROM financement";
+    private final String insertQuery = "INSERT INTO financement (libelle) VALUES (?)";
+    private final String updateQuery = "UPDATE financement SET libelle = ? WHERE idFinancement = ?";
+    private final String deleteQuery = "DELETE FROM financement WHERE idFinancement = ?";
 
-    public Objectif findById(int id) {
-        String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idObjectif = ?").toString();
-        Objectif objectif = null;
+
+    @Override
+    public Financement findById(int id) {
+        String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idFinancement  = ?").toString();
+        Financement financement = null;
         try (PreparedStatement stm = con.prepareStatement(selectQueryById)){
             stm.setInt(1, id);
 
@@ -36,55 +37,58 @@ public class ObjectifDAOImpl implements ObjectifDAO {
 
             while (result.next()){
                 String libelle = result.getString("libelle");
-                objectif = new Objectif(id, libelle);
+                financement = new Financement(id, libelle);
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
 
-        return objectif;
+        return financement;
     }
 
-    public List<Objectif> findAll(){
-        ArrayList<Objectif> listeObjectif = new ArrayList<>();
+    @Override
+    public List<Financement> findAll() {
+        ArrayList<Financement> listeFinancement = new ArrayList<>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                int id = result.getInt("idObjectif");
+                int id = result.getInt("idFinancement");
                 String libelle = result.getString("libelle");
 
-                listeObjectif.add(new Objectif(id, libelle));
+                listeFinancement.add(new Financement(id, libelle));
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
 
-        return listeObjectif;
+        return listeFinancement;
     }
 
-    public Objectif insert(Objectif objectif) {
+    @Override
+    public Financement insert(Financement financement) {
         try (PreparedStatement stm = con.prepareStatement(this.insertQuery)){
-            stm.setString(1, objectif.getLibelle());
+            stm.setString(1, financement.getLibelle());
 
             stm.executeUpdate();
             ResultSet generatedKeys = stm.getGeneratedKeys();
             if (generatedKeys.next()) {
-                objectif.setId(generatedKeys.getInt(1));
+                financement.setId(generatedKeys.getInt(1));
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
-        return objectif;
+        return financement;
     }
 
-    public Objectif update(Objectif objectif){
+    @Override
+    public Financement update(Financement financement) {
         try (PreparedStatement stm = con.prepareStatement(this.updateQuery)){
-            stm.setString(1, objectif.getLibelle());
-            stm.setInt(2, objectif.getId());
+            stm.setString(1, financement.getLibelle());
+            stm.setInt(2, financement.getId());
 
             stm.executeUpdate();
         }catch (SQLException e){
@@ -92,12 +96,13 @@ public class ObjectifDAOImpl implements ObjectifDAO {
             return null;
         }
 
-        return objectif;
+        return financement;
     }
 
-    public int delete(Objectif objectif){
+    @Override
+    public int delete(Financement financement) {
         try (PreparedStatement stm = con.prepareStatement(this.deleteQuery)){
-            stm.setInt(1, objectif.getId());
+            stm.setInt(1, financement.getId());
 
             stm.executeUpdate();
         }catch (SQLException e){
