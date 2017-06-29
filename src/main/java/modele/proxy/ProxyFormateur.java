@@ -5,6 +5,7 @@ import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Creneau;
 import modele.impl.Formateur;
+import modele.intf.ICreneau;
 import modele.intf.IFormateur;
 
 import java.util.List;
@@ -78,14 +79,19 @@ public class ProxyFormateur implements IFormateur {
     }
 
     @Override
-    public List<Creneau> getListCreneaux() {
+    public List<ICreneau> getListCreneaux() {
         getInstance();
         return this.instance.getListCreneaux();
     }
 
     @Override
-    public void setListCreneaux(List<Creneau> listCreneaux) {
+    public void setListCreneaux(List<ICreneau> listCreneaux) {
         getInstance();
         this.instance.setListCreneaux(listCreneaux);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

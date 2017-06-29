@@ -101,4 +101,10 @@ public class ProxyStagiaire implements IStagiaire {
         this.getInstance();
         this.instance.setListCreneaux(listCreneaux);
     }
+
+    @Override
+    public String toString() {
+        this.getInstance();
+        return this.instance.toString();
+    }
 }

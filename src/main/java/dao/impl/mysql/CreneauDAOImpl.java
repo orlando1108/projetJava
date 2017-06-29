@@ -2,13 +2,17 @@ package dao.impl.mysql;
 
 import dao.intf.CreneauDAO;
 import modele.impl.Creneau;
-import modele.impl.Formation;
-import modele.impl.Objectif;
-import modele.impl.Specialite;
+import modele.intf.IFormateur;
+import modele.intf.IFormation;
+import modele.intf.IStagiaire;
+import modele.proxy.ProxyFormateur;
+import modele.proxy.ProxyFormation;
+import modele.proxy.ProxyStagiaire;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,12 +21,8 @@ import java.util.List;
 public class CreneauDAOImpl extends DAOImpl<Creneau> implements CreneauDAO {
 
     private final String selectQuery =  "SELECT * FROM creneau " +
-            "INNER JOIN " +
-            "formation ON creneau.fk_formation = formation.idFormation " +
-            "INNER JOIN " +
-            "specialite ON formation.fk_specialite = specialite.idSpecialite " +
-            "INNER JOIN " +
-            "objectif ON formation.fk_objectif = objectif.idObjectif";
+            "INNER JOIN creneauformateur ON creneau.idCreneau = creneauformateur.fk_creneau " +
+            "INNER JOIN creneaustagiaire ON creneau.idCreneau = creneaustagiaire.fk_creneau";
     private final String insertQuery = "INSERT INTO creneau (dateDebut, dateFin, interne, fk_formation) VALUES (?, ?, ?, ?)";
     private final String updateQuery =  "UPDATE creneau SET dateDebut  = ?, " +
                                         "dateFin  = ?, interne = ?, fk_formation = ? WHERE idCreneau = ?";
@@ -30,31 +30,51 @@ public class CreneauDAOImpl extends DAOImpl<Creneau> implements CreneauDAO {
 
     @Override
     public Creneau findById(int id) {
-        String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idObjectif = ?").toString();
+        String selectQueryById = new StringBuilder().append(this.selectQuery).append(" WHERE idCreneau = ?").toString();
         Creneau creneau = null;
         try (PreparedStatement stm = con.prepareStatement(selectQueryById)){
             stm.setInt(1, id);
 
             ResultSet result = stm.executeQuery();
 
+            HashMap<Integer, List<Integer>> idCreneauToFormateur = new HashMap<>();
+            HashMap<Integer, List<Integer>> idCreneauToStagiaire = new HashMap<>();
+
             while (result.next()){
-                LocalDateTime dateDebut = result.getObject("creneau.dateDebut", LocalDateTime.class);
-                LocalDateTime dateFin = result.getObject("creneau.dateFin", LocalDateTime.class);
-                boolean interne = result.getBoolean("creneau.interne");
+                if (creneau == null){
+                    LocalDateTime dateDebut = result.getTimestamp("creneau.dateDebut").toLocalDateTime();
+                    LocalDateTime dateFin = result.getTimestamp("creneau.dateFin").toLocalDateTime();
+                    boolean interne = result.getBoolean("creneau.interne");
 
-                int idFormation = result.getInt("formation.idFormation");
-                String nomFormation = result.getString("formation.nom");
+                    int idFormation = result.getInt("creneau.fk_formation");
+                    IFormation formation = new ProxyFormation(idFormation);
 
-                int idObjectif = result.getInt("objectif.idObjectif");
-                String libelleObjectif = result.getString("objectif.libelle");
+                    creneau = new Creneau(id, dateDebut, dateFin, interne, formation);
+                    idCreneauToFormateur.put(id, new ArrayList<>());
+                    idCreneauToStagiaire.put(id, new ArrayList<>());
+                }
 
-                int idSpecialite = result.getInt("specialite.idSpecialite");
-                String nomSpecialite = result.getString("specialite.nom");
-                String codeSpecialite = result.getString("specialite.code");
+                int idFormateur = result.getInt("creneauformateur.fk_formateur");
+                if(!idCreneauToFormateur.get(id).contains(idFormateur)){
+                    IFormateur formateur = new ProxyFormateur(idFormateur);
+                    List<IFormateur> listTemp = creneau.getListFormateurs();
+                    listTemp.add(formateur);
+                    creneau.setListFormateurs(listTemp);
+                    List<Integer> listTempIdFormateur = idCreneauToFormateur.get(id);
+                    listTempIdFormateur.add(idFormateur);
+                    idCreneauToFormateur.put(id, listTempIdFormateur);
+                }
 
-                Formation formation = new Formation(id, nomFormation, new Specialite(idSpecialite, nomSpecialite, codeSpecialite), new Objectif(idObjectif, libelleObjectif));
-
-                creneau = new Creneau(id, dateDebut, dateFin, interne, formation);
+                int idStagiaire = result.getInt("creneaustagiaire.fk_stagiaire");
+                if(!idCreneauToStagiaire.get(id).contains(idStagiaire)){
+                    IStagiaire stagiaire = new ProxyStagiaire(idStagiaire);
+                    List<IStagiaire> listTemp = creneau.getListStagiaires();
+                    listTemp.add(stagiaire);
+                    creneau.setListStagiaires(listTemp);
+                    List<Integer> listTempIdStagiaires = idCreneauToStagiaire.get(id);
+                    listTempIdStagiaires.add(idStagiaire);
+                    idCreneauToStagiaire.put(id, listTempIdStagiaires);
+                }
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -65,37 +85,62 @@ public class CreneauDAOImpl extends DAOImpl<Creneau> implements CreneauDAO {
 
     @Override
     public List<Creneau> findAll() {
-        ArrayList<Creneau> listeCreneau = new ArrayList<>();
+        HashMap<Integer, Creneau> idToCreneau = new HashMap<>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
 
+            HashMap<Integer, List<Integer>> idCreneauToFormateur = new HashMap<>();
+            HashMap<Integer, List<Integer>> idCreneauToStagiaire = new HashMap<>();
+
             while (result.next()){
-                int id = result.getInt("idObjectif");
-                LocalDateTime dateDebut = result.getObject("creneau.dateDebut", LocalDateTime.class);
-                LocalDateTime dateFin = result.getObject("creneau.dateFin", LocalDateTime.class);
-                boolean interne = result.getBoolean("creneau.interne");
+                Creneau creneau;
+                Integer id = result.getInt("creneau.fk_formation");
+                if (!idToCreneau.keySet().contains(id)) {
+                    LocalDateTime dateDebut = result.getTimestamp("creneau.dateDebut").toLocalDateTime();
+                    LocalDateTime dateFin = result.getTimestamp("creneau.dateFin").toLocalDateTime();
+                    boolean interne = result.getBoolean("creneau.interne");
 
-                int idFormation = result.getInt("formation.idFormation");
-                String nomFormation = result.getString("formation.nom");
+                    int idFormation = result.getInt("creneau.fk_formation");
+                    IFormation formation = new ProxyFormation(idFormation);
 
-                int idObjectif = result.getInt("objectif.idObjectif");
-                String libelleObjectif = result.getString("objectif.libelle");
+                    creneau = new Creneau(id, dateDebut, dateFin, interne, formation);
 
-                int idSpecialite = result.getInt("specialite.idSpecialite");
-                String nomSpecialite = result.getString("specialite.nom");
-                String codeSpecialite = result.getString("specialite.code");
+                    idCreneauToFormateur.put(id, new ArrayList<>());
+                    idCreneauToStagiaire.put(id, new ArrayList<>());
+                }else{
+                    creneau = idToCreneau.get(id);
+                }
 
-                Formation formation = new Formation(id, nomFormation, new Specialite(idSpecialite, nomSpecialite, codeSpecialite), new Objectif(idObjectif, libelleObjectif));
+                int idFormateur = result.getInt("creneauformateur.fk_formateur");
+                if(!idCreneauToFormateur.get(id).contains(idFormateur)){
+                    IFormateur formateur = new ProxyFormateur(idFormateur);
+                    List<IFormateur> listTemp = creneau.getListFormateurs();
+                    listTemp.add(formateur);
+                    creneau.setListFormateurs(listTemp);
+                    List<Integer> listTempIdFormateur = idCreneauToFormateur.get(id);
+                    listTempIdFormateur.add(idFormateur);
+                    idCreneauToFormateur.put(id, listTempIdFormateur);
+                }
 
-                listeCreneau.add(new Creneau(id, dateDebut, dateFin, interne, formation));
+                int idStagiaire = result.getInt("creneaustagiaire.fk_stagiaire");
+                if(!idCreneauToStagiaire.get(id).contains(idStagiaire)){
+                    IStagiaire stagiaire = new ProxyStagiaire(idStagiaire);
+                    List<IStagiaire> listTemp = creneau.getListStagiaires();
+                    listTemp.add(stagiaire);
+                    creneau.setListStagiaires(listTemp);
+                    List<Integer> listTempIdStagiaires = idCreneauToStagiaire.get(id);
+                    listTempIdStagiaires.add(idStagiaire);
+                    idCreneauToStagiaire.put(id, listTempIdStagiaires);
+                }
+                idToCreneau.put(id, creneau);
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
 
-        return listeCreneau;
+        return new ArrayList<>(idToCreneau.values());
     }
 
     @Override

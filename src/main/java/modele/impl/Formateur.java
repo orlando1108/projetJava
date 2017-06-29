@@ -1,5 +1,6 @@
 package modele.impl;
 
+import modele.intf.ICreneau;
 import modele.intf.IFormateur;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class Formateur extends Personne implements IFormateur{
 
-    private List<Creneau> listCreneaux;
+    private List<ICreneau> listCreneaux;
     protected boolean interne;
 
     public Formateur(int id, String nom, String prenom, boolean interne) {
@@ -25,11 +26,11 @@ public class Formateur extends Personne implements IFormateur{
         this.listCreneaux = new ArrayList<>();
     }
 
-    public List<Creneau> getListCreneaux() {
+    public List<ICreneau> getListCreneaux() {
         return listCreneaux;
     }
 
-    public void setListCreneaux(List<Creneau> listCreneaux) {
+    public void setListCreneaux(List<ICreneau> listCreneaux) {
         this.listCreneaux = listCreneaux;
     }
 
@@ -39,5 +40,9 @@ public class Formateur extends Personne implements IFormateur{
 
     public void setInterne(boolean interne) {
         this.interne = interne;
+    }
+
+    public String toString(){
+        return this.getPrenom() + " " + this.getNom();
     }
 }

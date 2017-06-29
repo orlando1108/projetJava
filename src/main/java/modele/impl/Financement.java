@@ -1,7 +1,7 @@
 package modele.impl;
 
 import modele.intf.IFinancement;
-import modele.intf.IStagiaire;
+import modele.intf.IFinancementStagiaire;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +12,17 @@ import java.util.List;
 public class Financement implements IFinancement {
     private int id;
     private String libelle;
-    private List<IStagiaire> listStagiaires;
+    private List<IFinancementStagiaire> listFinancementsStagiaires;
 
     public Financement(int idFinancement, String libelle) {
         this.id = idFinancement;
         this.libelle = libelle;
-        this.listStagiaires = new ArrayList<>();
+        this.listFinancementsStagiaires = new ArrayList<>();
     }
 
     public Financement(String libelle) {
         this.libelle = libelle;
-        this.listStagiaires = new ArrayList<>();
+        this.listFinancementsStagiaires = new ArrayList<>();
     }
 
     public int getId() {
@@ -41,11 +41,19 @@ public class Financement implements IFinancement {
         this.libelle = libelle;
     }
 
-    public List<IStagiaire> getListStagiaires() {
-        return listStagiaires;
+    public List<IFinancementStagiaire> getListFinancementsStagiaires() {
+        return listFinancementsStagiaires;
     }
 
-    public void setListStagiaires(List<IStagiaire> listStagiaires) {
-        this.listStagiaires = listStagiaires;
+    public void setListFinancementsStagiaires(List<IFinancementStagiaire> listStagiaires) {
+        this.listFinancementsStagiaires = listStagiaires;
+    }
+
+    @Override
+    public String toString() {
+        return "Financement{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                '}';
     }
 }

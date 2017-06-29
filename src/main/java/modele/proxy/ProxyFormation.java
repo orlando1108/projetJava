@@ -4,9 +4,12 @@ import dao.DAOFactory;
 import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Formation;
+import modele.intf.ICreneau;
 import modele.intf.IFormation;
 import modele.intf.IObjectif;
 import modele.intf.ISpecialite;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -75,5 +78,22 @@ public class ProxyFormation implements IFormation{
         getInstance();
         this.instance.setObjectif(objectif);
 
+    }
+
+    @Override
+    public List<ICreneau> getListCreneaux() {
+        getInstance();
+        return this.instance.getListCreneaux();
+    }
+
+    @Override
+    public void setListCreneaux(List<ICreneau> listCreneaux) {
+        getInstance();
+        this.instance.setListCreneaux(listCreneaux);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

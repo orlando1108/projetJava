@@ -4,7 +4,10 @@ import dao.intf.DAO;
 import dao.DAOFactory;
 import dao.DAONames;
 import modele.impl.Objectif;
+import modele.intf.IFormation;
 import modele.intf.IObjectif;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -21,7 +24,7 @@ public class ProxyObjectif implements IObjectif{
 
     private void getInstance(){
         if (instance == null) {
-            DAO<Objectif> dao = DAOFactory.getDAO(DAONames.Specialite);
+            DAO<Objectif> dao = DAOFactory.getDAO(DAONames.Objectif);
             this.instance = dao.findById(this.id);
         }
     }
@@ -48,5 +51,22 @@ public class ProxyObjectif implements IObjectif{
     public void setLibelle(String libelle) {
         this.getInstance();
         this.instance.setLibelle(libelle);
+    }
+
+    @Override
+    public List<IFormation> getListFormations() {
+        getInstance();
+        return this.instance.getListFormations();
+    }
+
+    @Override
+    public void setListFormations(List<IFormation> listFormations) {
+        getInstance();
+        this.instance.setListFormations(listFormations);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

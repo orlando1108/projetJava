@@ -1,6 +1,6 @@
 package dao;
 
-import dao.impl.mysql.ObjectifDAOImpl;
+import dao.impl.mysql.*;
 import dao.intf.DAO;
 
 /**
@@ -13,6 +13,18 @@ public abstract class DAOFactory {
         switch (type){
             case Objectif:
                 return new ObjectifDAOImpl();
+            case Creneau:
+                return new CreneauDAOImpl();
+            case Financement:
+                return new FinancementDAOImpl();
+            case Formateur:
+                return new FormateurDAOImpl();
+            case Formation:
+                return new FormationDAOImpl();
+            case Specialite:
+                return new SpecialiteDAOImpl();
+            case Stagiaire:
+                return new StagiaireDAOImpl();
 
             default:
                 return null;

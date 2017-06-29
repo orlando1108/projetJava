@@ -2,15 +2,23 @@ package dao.impl.mysql;
 
 import dao.intf.FormationDAO;
 import db.ConnectionFactory;
+import modele.impl.Creneau;
 import modele.impl.Formation;
 import modele.impl.Objectif;
 import modele.impl.Specialite;
+import modele.intf.ICreneau;
+import modele.intf.IObjectif;
+import modele.intf.ISpecialite;
+import modele.proxy.ProxyCreneau;
+import modele.proxy.ProxyObjectif;
+import modele.proxy.ProxySpecialite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,7 +30,9 @@ public class FormationDAOImpl extends DAOImpl<Formation> implements FormationDAO
             ConnectionFactory.CERFA
     );
 
-    private final String selectQuery = "SELECT * FROM formation INNER JOIN specialite ON formation.fk_specialite = specialite.idSpecialite INNER JOIN objectif ON formation.fk_objectif = objectif.idObjectif";
+    private final String selectQuery = ""+
+            "SELECT * FROM formation "+
+            "INNER JOIN creneau ON formation.idFormation = creneau.fk_formation";
     private final String insertQuery = "INSERT INTO formation (nom, fk_specialite, fk_objectif) VALUES (?, ?, ?)";
     private final String updateQuery = "UPDATE formation SET nom = ?, fk_specialite = ?, fk_objectif = ? WHERE idFormation = ?";
     private final String deleteQuery = "DELETE FROM formation WHERE idFormation = ?";
@@ -37,14 +47,20 @@ public class FormationDAOImpl extends DAOImpl<Formation> implements FormationDAO
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                String nomFormation = result.getString("formation.nom");
-                int idObjectif = result.getInt("objectif.idObjectif");
-                String libelleObjectif = result.getString("objectif.libelle");
-                int idSpecialite = result.getInt("specialite.idSpecialite");
-                String nomSpecialite = result.getString("specialite.nom");
-                String codeSpecialite = result.getString("specialite.code");
 
-                formation = new Formation(id, nomFormation, new Specialite(idSpecialite, nomSpecialite, codeSpecialite), new Objectif(idObjectif, libelleObjectif));
+                if (formation == null) {
+                    String nomFormation = result.getString("formation.nom");
+                    int idObjectif = result.getInt("formation.fk_objectif");
+                    int idSpecialite = result.getInt("formation.fk_specialite");
+                    ISpecialite specialite = new ProxySpecialite(idSpecialite);
+                    IObjectif objectif = new ProxyObjectif(idObjectif);
+                    formation = new Formation(id, nomFormation, specialite, objectif);
+                }
+                int idCreneau = result.getInt("creneau.idCreneau");
+                ICreneau creneau = new ProxyCreneau(idCreneau);
+                List<ICreneau> listTemp = formation.getListCreneaux();
+                listTemp.add(creneau);
+                formation.setListCreneaux(listTemp);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -55,28 +71,39 @@ public class FormationDAOImpl extends DAOImpl<Formation> implements FormationDAO
 
     @Override
     public List<Formation> findAll() {
-        ArrayList<Formation> listeFormations = new ArrayList<>();
+        HashMap<Integer, Formation> idToFormation= new HashMap<>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                int idFormation = result.getInt("objectif.idFormation");
-                String nomFormation = result.getString("formation.nom");
-                int idObjectif = result.getInt("objectif.idObjectif");
-                String libelleObjectif = result.getString("objectif.libelle");
-                int idSpecialite = result.getInt("specialite.idSpecialite");
-                String nomSpecialite = result.getString("specialite.nom");
-                String codeSpecialite = result.getString("specialite.code");
+                Formation formation;
+                int id = result.getInt("objectif.idFormation");
+                if (!idToFormation.containsKey(id)){
+                    String nomFormation = result.getString("formation.nom");
+                    int idObjectif = result.getInt("formation.fk_objectif");
+                    int idSpecialite = result.getInt("formation.fk_specialite");
+                    ISpecialite specialite = new ProxySpecialite(idSpecialite);
+                    IObjectif objectif = new ProxyObjectif(idObjectif);
+                    formation = new Formation(id, nomFormation, specialite, objectif);
+                }else{
+                    formation = idToFormation.get(id);
+                }
 
-                listeFormations.add(new Formation(idFormation, nomFormation, new Specialite(idSpecialite, nomSpecialite, codeSpecialite), new Objectif(idObjectif, libelleObjectif)));
+                int idCreneau = result.getInt("creneau.idCreneau");
+                ICreneau creneau = new ProxyCreneau(idCreneau);
+                List<ICreneau> listTemp = formation.getListCreneaux();
+                listTemp.add(creneau);
+                formation.setListCreneaux(listTemp);
+
+                idToFormation.put(id, formation);
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
 
-        return listeFormations;
+        return new ArrayList<>(idToFormation.values());
     }
 
     @Override

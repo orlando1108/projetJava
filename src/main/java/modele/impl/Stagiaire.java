@@ -53,4 +53,8 @@ public class Stagiaire extends Personne implements IStagiaire{
     public void setInterne(boolean interne) {
         this.interne = interne;
     }
+
+    public String toString(){
+        return this.getPrenom() + " " + this.getNom();
+    }
 }

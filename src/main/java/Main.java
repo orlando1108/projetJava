@@ -1,5 +1,11 @@
+import dao.impl.mysql.CreneauDAOImpl;
 import dao.impl.mysql.ObjectifDAOImpl;
+import dao.impl.mysql.StagiaireDAOImpl;
+import dao.intf.CreneauDAO;
+import dao.intf.StagiaireDAO;
 import modele.impl.Objectif;
+import modele.impl.Stagiaire;
+import modele.intf.ICreneau;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +17,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String [ ] args) {
-
-        ObjectifDAOImpl objDaoImpl = new ObjectifDAOImpl();
-
-        List<Objectif> list = new ArrayList<>();
-
-        list.addAll(objDaoImpl.findAll());
-
-        list.forEach((c)-> {
-            System.out.println(c.toString());
-        });
+        
     }
 }

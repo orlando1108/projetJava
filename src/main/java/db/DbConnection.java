@@ -1,11 +1,9 @@
 package db;
 import utils.PropertiesException;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
 
 /**
  * Created by VTanchereau on 27/06/2017.

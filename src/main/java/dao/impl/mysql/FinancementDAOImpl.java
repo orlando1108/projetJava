@@ -2,11 +2,17 @@ package dao.impl.mysql;
 
 import dao.intf.FinancementDAO;
 import modele.impl.Financement;
+import modele.impl.FinancementStagiaire;
+import modele.intf.IFinancementStagiaire;
+import modele.proxy.ProxyFinancement;
+import modele.proxy.ProxyStagiaire;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,7 +20,9 @@ import java.util.List;
  */
 public class FinancementDAOImpl extends DAOImpl<Financement> implements FinancementDAO {
 
-    private final String selectQuery = "SELECT idFinancement, libelle FROM financement";
+    private final String selectQuery = "" +
+            "SELECT * FROM financement " +
+            "INNER JOIN financementstagiaire ON financement.idFinancement = financementstagiaire.fk_financement";
     private final String insertQuery = "INSERT INTO financement (libelle) VALUES (?)";
     private final String updateQuery = "UPDATE financement SET libelle = ? WHERE idFinancement = ?";
     private final String deleteQuery = "DELETE FROM financement WHERE idFinancement = ?";
@@ -30,8 +38,27 @@ public class FinancementDAOImpl extends DAOImpl<Financement> implements Financem
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                String libelle = result.getString("libelle");
-                financement = new Financement(id, libelle);
+                if (financement == null) {
+                    String libelle = result.getString("financement.libelle");
+                    financement = new Financement(id, libelle);
+                }
+                int idStagiaire = result.getInt("financementStagiaire.fk_stagiaire");
+                LocalDate dateDebut = result.getDate("financementStagiaire.dateDebut").toLocalDate();
+                LocalDate dateFin = null;
+                try{
+                    dateFin = result.getDate("financementStagiaire.dateFin").toLocalDate();
+                }catch (NullPointerException e){
+
+                }
+                FinancementStagiaire fs;
+                if (dateFin == null) {
+                    fs = new FinancementStagiaire(new ProxyStagiaire(idStagiaire), financement, dateDebut);
+                }else {
+                    fs = new FinancementStagiaire(new ProxyStagiaire(idStagiaire), financement, dateDebut, dateFin);
+                }
+                List<IFinancementStagiaire> listTemp = financement.getListFinancementsStagiaires();
+                listTemp.add(fs);
+                financement.setListFinancementsStagiaires(listTemp);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -42,23 +69,46 @@ public class FinancementDAOImpl extends DAOImpl<Financement> implements Financem
 
     @Override
     public List<Financement> findAll() {
-        ArrayList<Financement> listeFinancement = new ArrayList<>();
+        HashMap<Integer, Financement> idToFinancement = new HashMap<>();
 
-        try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
+        try (PreparedStatement stm = con.prepareStatement(this.selectQuery)) {
             ResultSet result = stm.executeQuery();
 
-            while (result.next()){
-                int id = result.getInt("idFinancement");
-                String libelle = result.getString("libelle");
+            while (result.next()) {
+                Financement financement;
+                Integer id = result.getInt("financement.idFinancement");
+                if (idToFinancement.containsKey(id)) {
+                    String libelle = result.getString("libelle");
+                    financement = new Financement(id, libelle);
+                } else {
+                    financement = idToFinancement.get(id);
+                }
+                int idStagiaire = result.getInt("financementStagiaire.fk_stagiaire");
+                LocalDate dateDebut = result.getDate("financementStagiaire.dateDebut").toLocalDate();
+                LocalDate dateFin = null;
+                try {
+                    dateFin = result.getDate("financementStagiaire.dateFin").toLocalDate();
+                } catch (NullPointerException e) {
 
-                listeFinancement.add(new Financement(id, libelle));
+                }
+                FinancementStagiaire fs;
+                if (dateFin == null) {
+                    fs = new FinancementStagiaire(new ProxyStagiaire(idStagiaire), financement, dateDebut);
+                } else {
+                    fs = new FinancementStagiaire(new ProxyStagiaire(idStagiaire), financement, dateDebut, dateFin);
+                }
+                List<IFinancementStagiaire> listTemp = financement.getListFinancementsStagiaires();
+                listTemp.add(fs);
+                financement.setListFinancementsStagiaires(listTemp);
+
+                idToFinancement.put(id, financement);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
-        return listeFinancement;
+        return new ArrayList<>(idToFinancement.values());
     }
 
     @Override

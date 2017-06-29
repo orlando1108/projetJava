@@ -4,7 +4,10 @@ import dao.DAOFactory;
 import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Specialite;
+import modele.intf.IFormation;
 import modele.intf.ISpecialite;
+
+import java.util.List;
 
 /**
  * Created by VTanchereau on 28/06/2017.
@@ -41,7 +44,7 @@ public class ProxySpecialite implements ISpecialite {
     @Override
     public String getNom() {
         this.getInstance();
-        return this.getNom();
+        return this.instance.getNom();
     }
 
     @Override
@@ -53,12 +56,29 @@ public class ProxySpecialite implements ISpecialite {
     @Override
     public String getCode() {
         this.getInstance();
-        return this.getCode();
+        return this.instance.getCode();
     }
 
     @Override
     public void setCode(String code) {
         this.getInstance();
         this.instance.setCode(code);
+    }
+
+    @Override
+    public List<IFormation> getListFormations() {
+        getInstance();
+        return this.instance.getListFormations();
+    }
+
+    @Override
+    public void setListFormations(List<IFormation> listFormations) {
+        getInstance();
+        this.instance.setListFormations(listFormations);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

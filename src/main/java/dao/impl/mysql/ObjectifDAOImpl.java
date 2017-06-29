@@ -3,12 +3,15 @@ package dao.impl.mysql;
 import dao.intf.ObjectifDAO;
 import db.ConnectionFactory;
 import modele.impl.Objectif;
+import modele.intf.IFormation;
+import modele.proxy.ProxyFormation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,7 +20,9 @@ import java.util.List;
 
 public class ObjectifDAOImpl extends DAOImpl<Objectif> implements ObjectifDAO {
 
-    private final String selectQuery = "SELECT idObjectif, libelle FROM objectif";
+    private final String selectQuery = "" +
+            "SELECT * FROM objectif " +
+            "INNER JOIN formation ON formation.fk_objectif = objectif.idObjectif";
     private final String insertQuery = "INSERT INTO objectif (libelle) VALUES (?)";
     private final String updateQuery = "UPDATE objectif SET libelle = ? WHERE idObjectif = ?";
     private final String deleteQuery = "DELETE FROM objectif WHERE idObjectif = ?";
@@ -31,8 +36,17 @@ public class ObjectifDAOImpl extends DAOImpl<Objectif> implements ObjectifDAO {
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                String libelle = result.getString("libelle");
-                objectif = new Objectif(id, libelle);
+                if (objectif == null){
+                    String libelle = result.getString("libelle");
+                    objectif = new Objectif(id, libelle);
+                }
+
+                int idFormation = result.getInt("formation.idFormation");
+                IFormation formation = new ProxyFormation(idFormation);
+                List<IFormation> listTemp = objectif.getListFormations();
+                listTemp.add(formation);
+                objectif.setListFormations(listTemp);
+
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -42,23 +56,37 @@ public class ObjectifDAOImpl extends DAOImpl<Objectif> implements ObjectifDAO {
     }
 
     public List<Objectif> findAll(){
-        ArrayList<Objectif> listeObjectif = new ArrayList<>();
+        HashMap<Integer, Objectif> idToObjectif= new HashMap<>();
 
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                int id = result.getInt("idObjectif");
-                String libelle = result.getString("libelle");
+                Objectif objectif;
 
-                listeObjectif.add(new Objectif(id, libelle));
+                int id = result.getInt("idObjectif");
+
+                if (!idToObjectif.containsKey(id)){
+                    String libelle = result.getString("libelle");
+                    objectif = new Objectif(id,libelle);
+                }
+                else{
+                    objectif = idToObjectif.get(id);
+                }
+
+                int idFormation = result.getInt("formation.idFormation");
+                IFormation formation = new ProxyFormation(idFormation);
+                List<IFormation> listTemp = objectif.getListFormations();
+                listTemp.add(formation);
+                objectif.setListFormations(listTemp);
+
+                idToObjectif.put(id, objectif);
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
-
-        return listeObjectif;
+        return new ArrayList<>(idToObjectif.values());
     }
 
     public Objectif insert(Objectif objectif) {

@@ -39,79 +39,84 @@ public class ProxyCreneau implements ICreneau {
 
     @Override
     public void setId(int id) {
-        getInstance();
+        this.getInstance();
         this.instance.setId(id);
     }
 
     @Override
     public LocalDateTime getDateDebut() {
-        getInstance();
+        this.getInstance();
         return this.instance.getDateDebut();
     }
 
     @Override
     public void setDateDebut(LocalDateTime dateDebut) {
-        getInstance();
+        this.getInstance();
         this.instance.setDateDebut(dateDebut);
     }
 
     @Override
     public LocalDateTime getDateFin() {
-        getInstance();
+        this.getInstance();
         return this.instance.getDateFin();
     }
 
     @Override
     public void setDateFin(LocalDateTime dateFin) {
-        getInstance();
+        this.getInstance();
         this.instance.setDateFin(dateFin);
     }
 
     @Override
     public boolean isInterne() {
-        getInstance();
+        this.getInstance();
         return this.instance.isInterne();
     }
 
     @Override
     public void setInterne(boolean interne) {
-        getInstance();
+        this.getInstance();
         this.instance.setInterne(interne);
     }
 
     @Override
     public IFormation getFormation() {
-        getInstance();
+        this.getInstance();
         return this.instance.getFormation();
     }
 
     @Override
     public void setFormation(IFormation formation) {
-        getInstance();
+        this.getInstance();
         this.instance.setFormation(formation);
     }
 
     @Override
     public List<IStagiaire> getListStagiaires() {
-        getInstance();
+        this.getInstance();
         return this.instance.getListStagiaires();
     }
 
     @Override
     public void setListStagiaires(List<IStagiaire> listStagiaires) {
-        getInstance();
+        this.getInstance();
         this.instance.setListStagiaires(listStagiaires);
     }
 
     @Override
     public List<IFormateur> getListFormateurs() {
-        getInstance();
+        this.getInstance();
         return this.instance.getListFormateurs();
     }
 
     @Override
     public void setListFormateurs(List<IFormateur> listFormateurs) {
-        getInstance();
+        this.getInstance();
         this.instance.setListFormateurs(listFormateurs);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

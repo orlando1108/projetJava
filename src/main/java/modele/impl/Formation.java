@@ -2,9 +2,13 @@ package modele.impl;
 
 import modele.impl.Objectif;
 import modele.impl.Specialite;
+import modele.intf.ICreneau;
 import modele.intf.IFormation;
 import modele.intf.IObjectif;
 import modele.intf.ISpecialite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by VTanchereau on 27/06/2017.
@@ -14,18 +18,21 @@ public class Formation implements IFormation {
     private String nom;
     private ISpecialite specialite;
     private IObjectif objectif;
+    private List<ICreneau> listCreneaux;
 
     public Formation(int id, String nom, ISpecialite specialite, IObjectif objectif) {
         this.id = id;
         this.nom = nom;
         this.specialite = specialite;
         this.objectif = objectif;
+        this.listCreneaux = new ArrayList<>();
     }
 
     public Formation(String nom, ISpecialite specialite, IObjectif objectif) {
         this.nom = nom;
         this.specialite = specialite;
         this.objectif = objectif;
+        this.listCreneaux = new ArrayList<>();
     }
 
     public int getId() {
@@ -58,5 +65,23 @@ public class Formation implements IFormation {
 
     public void setObjectif(IObjectif objectif) {
         this.objectif = objectif;
+    }
+
+    public List<ICreneau> getListCreneaux() {
+        return listCreneaux;
+    }
+
+    public void setListCreneaux(List<ICreneau> listCreneaux) {
+        this.listCreneaux = listCreneaux;
+    }
+
+    @Override
+    public String toString() {
+        return "Formation{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", specialite=" + specialite +
+                ", objectif=" + objectif +
+                '}';
     }
 }

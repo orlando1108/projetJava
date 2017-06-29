@@ -10,6 +10,6 @@ public interface IFinancement {
     void setId(int id);
     String getLibelle();
     void setLibelle(String libelle);
-    List<IStagiaire> getListStagiaires();
-    void setListStagiaires(List<IStagiaire> listStagiaires);
+    List<IFinancementStagiaire> getListFinancementsStagiaires();
+    void setListFinancementsStagiaires(List<IFinancementStagiaire> listStagiaires);
 }

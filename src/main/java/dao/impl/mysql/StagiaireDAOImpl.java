@@ -46,34 +46,43 @@ public class StagiaireDAOImpl extends DAOImpl<Stagiaire> implements StagiaireDAO
 
             ResultSet result = stm.executeQuery();
 
-            List<Integer> setIdFS = new ArrayList<>();
-            List<Integer> setIdCreneaux = new ArrayList<>();
-            List<Integer> setIdStagiaires = new ArrayList<>();
-
             HashMap<Integer, List<Integer>> idStagiaireToListCreneaux = new HashMap<>();
+            HashMap<Integer, List<Integer>> idStagiaireToListFS = new HashMap<>();
 
             while (result.next()){
-                if (!setIdStagiaires.contains(id)) {
+                if (stagiaire == null) {
                     String nom = result.getString("personne.nom");
                     String prenom = result.getString("personne.prenom");
                     boolean interne = result.getBoolean("stagiaire.interne");
                     stagiaire = new Stagiaire(id, nom, prenom, interne);
-                    setIdStagiaires.add(id);
                     idStagiaireToListCreneaux.put(id, new ArrayList<>());
+                    idStagiaireToListFS.put(id, new ArrayList<>());
                 }
                 int idFinancement = result.getInt("financementStagiaire.fk_financement");
-                if (!setIdFS.contains(idFinancement)) {
+                if (!idStagiaireToListFS.get(id).contains(idFinancement)) {
                     LocalDate dateDebut = result.getDate("financementStagiaire.dateDebut").toLocalDate();
-                    LocalDate dateFin = result.getDate("financementStagiaire.dateFin").toLocalDate();
-                    FinancementStagiaire fs = new FinancementStagiaire(stagiaire, new ProxyFinancement(idFinancement), dateDebut, dateFin);
+                    LocalDate dateFin = null;
+                    try{
+                        dateFin = result.getDate("financementStagiaire.dateFin").toLocalDate();
+                    }catch (NullPointerException e){
+
+                    }
+                    FinancementStagiaire fs;
+                    if (dateFin == null) {
+                        fs = new FinancementStagiaire(stagiaire, new ProxyFinancement(idFinancement), dateDebut);
+                    }else {
+                        fs = new FinancementStagiaire(stagiaire, new ProxyFinancement(idFinancement), dateDebut, dateFin);
+                    }
                     List<IFinancementStagiaire> listTemp = stagiaire.getListFinancementsStagiaires();
                     listTemp.add(fs);
                     stagiaire.setListFinancementsStagiaires(listTemp);
-                    setIdFS.add(idFinancement);
+                    List<Integer> listTempIdFS = idStagiaireToListFS.get(id);
+                    listTempIdFS.add(idFinancement);
+                    idStagiaireToListFS.put(id, listTempIdFS);
                 }
                 int idCreneau = result.getInt("creneaustagiaire.fk_creneau");
                 if(!idStagiaireToListCreneaux.get(id).contains(idCreneau)){
-                    ProxyCreneau proxyCreneau = new ProxyCreneau(idCreneau);
+                    ICreneau proxyCreneau = new ProxyCreneau(idCreneau);
                     List<ICreneau> listTemp = stagiaire.getListCreneaux();
                     listTemp.add(proxyCreneau);
                     stagiaire.setListCreneaux(listTemp);
@@ -90,23 +99,66 @@ public class StagiaireDAOImpl extends DAOImpl<Stagiaire> implements StagiaireDAO
     }
 
     public List<Stagiaire> findAll(){
-        List<Stagiaire> listStagiaire = new ArrayList<>();
+        HashMap<Integer, Stagiaire> idToStagiaire= new HashMap<>();
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
 
             ResultSet result = stm.executeQuery();
 
-            while (result.next()){
-                int id = result.getInt("stagiaire.idStagiaire");
-                String nom = result.getString("personne.nom");
-                String prenom = result.getString("personne.prenom");
-                boolean interne = result.getBoolean("stagiaire.interne");
-                listStagiaire.add(new Stagiaire(id, nom, prenom, interne));
+            HashMap<Integer, List<Integer>> idStagiaireToListCreneaux = new HashMap<>();
+            HashMap<Integer, List<Integer>> idStagiaireToListFS = new HashMap<>();
+
+            while (result.next()) {
+                Stagiaire stagiaire;
+                Integer id = result.getInt("stagiaire.idStagiaire");
+                if (!idToStagiaire.keySet().contains(id)) {
+                    String nom = result.getString("personne.nom");
+                    String prenom = result.getString("personne.prenom");
+                    boolean interne = result.getBoolean("stagiaire.interne");
+                    stagiaire = new Stagiaire(id, nom, prenom, interne);
+                    idStagiaireToListCreneaux.put(id, new ArrayList<>());
+                    idStagiaireToListFS.put(id, new ArrayList<>());
+                }else{
+                    stagiaire = idToStagiaire.get(id);
+                }
+                int idFinancement = result.getInt("financementStagiaire.fk_financement");
+                if (!idStagiaireToListFS.get(id).contains(idFinancement)) {
+                    LocalDate dateDebut = result.getDate("financementStagiaire.dateDebut").toLocalDate();
+                    LocalDate dateFin = null;
+                    try{
+                        dateFin = result.getDate("financementStagiaire.dateFin").toLocalDate();
+                    }catch (NullPointerException e){
+
+                    }
+                    FinancementStagiaire fs;
+                    if (dateFin == null) {
+                        fs = new FinancementStagiaire(stagiaire, new ProxyFinancement(idFinancement), dateDebut);
+                    }else {
+                        fs = new FinancementStagiaire(stagiaire, new ProxyFinancement(idFinancement), dateDebut, dateFin);
+                    }
+                    List<IFinancementStagiaire> listTemp = stagiaire.getListFinancementsStagiaires();
+                    listTemp.add(fs);
+                    stagiaire.setListFinancementsStagiaires(listTemp);
+                    List<Integer> listTempIdFS = idStagiaireToListFS.get(id);
+                    listTempIdFS.add(idFinancement);
+                    idStagiaireToListFS.put(id, listTempIdFS);
+                }
+                int idCreneau = result.getInt("creneaustagiaire.fk_creneau");
+                if (!idStagiaireToListCreneaux.get(id).contains(idCreneau)) {
+                    ProxyCreneau proxyCreneau = new ProxyCreneau(idCreneau);
+                    List<ICreneau> listTemp = stagiaire.getListCreneaux();
+                    listTemp.add(proxyCreneau);
+                    stagiaire.setListCreneaux(listTemp);
+                    List<Integer> listTempIdCreneaux = idStagiaireToListCreneaux.get(id);
+                    listTempIdCreneaux.add(idCreneau);
+                    idStagiaireToListCreneaux.put(id, listTempIdCreneaux);
+                }
+                idToStagiaire.put(id, stagiaire);
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
 
-        return listStagiaire;
+        return new ArrayList<>(idToStagiaire.values());
     }
 
     public Stagiaire insert(Stagiaire stagiaire){

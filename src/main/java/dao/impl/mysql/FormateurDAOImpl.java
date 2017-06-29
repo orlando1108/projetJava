@@ -3,12 +3,15 @@ package dao.impl.mysql;
 import dao.intf.FormateurDAO;
 import db.ConnectionFactory;
 import modele.impl.Formateur;
+import modele.intf.ICreneau;
+import modele.proxy.ProxyCreneau;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +22,10 @@ public class FormateurDAOImpl implements FormateurDAO {
             ConnectionFactory.CERFA
     );
 
-    private final String selectQuery = "SELECT * FROM formateur INNER JOIN personne ON formateur.idFormateur = personne.idPersonne";
+    private final String selectQuery = "" +
+            "SELECT * FROM formateur " +
+            "INNER JOIN personne ON formateur.idFormateur = personne.idPersonne " +
+            "INNER JOIN creneauformateur ON formateur.idFormateur = creneauformateur.fk_formateur";
     private final String insertPersonneQuery = "INSERT INTO personne (nom, prenom) VALUES (?, ?)";
     private final String insertFormateurQuery = "INSERT INTO formateur (interne, idFormateur) VALUES (?, ?)";
     private final String updatePersonneQuery = "UPDATE personne SET nom = ?, prenom = ? WHERE idPersonne = ?";
@@ -36,10 +42,19 @@ public class FormateurDAOImpl implements FormateurDAO {
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                String nom = result.getString("personne.nom");
-                String prenom = result.getString("personne.prenom");
-                boolean interne = result.getBoolean("formateur.interne");
-                formateur = new Formateur(id, nom, prenom, interne);
+                if (formateur == null) {
+                    String nom = result.getString("personne.nom");
+                    String prenom = result.getString("personne.prenom");
+                    boolean interne = result.getBoolean("formateur.interne");
+                    formateur = new Formateur(id, nom, prenom, interne);
+                }
+
+                int idCreneau = result.getInt("creneauformateur.fk_creneau");
+                ICreneau creneau = new ProxyCreneau(idCreneau);
+                List<ICreneau> listTemp = formateur.getListCreneaux();
+                listTemp.add(creneau);
+                formateur.setListCreneaux(listTemp);
+
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -49,23 +64,36 @@ public class FormateurDAOImpl implements FormateurDAO {
     }
 
     public List<Formateur> findAll(){
-        List<Formateur> listFormateur = new ArrayList<>();
+        HashMap<Integer, Formateur> idToFormateur= new HashMap<>();
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
 
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
+                Formateur formateur;
                 int id = result.getInt("formateur.idFormateur");
-                String nom = result.getString("personne.nom");
-                String prenom = result.getString("personne.prenom");
-                boolean interne = result.getBoolean("formateur.interne");
-                listFormateur.add(new Formateur(id, nom, prenom, interne));
+                if (!idToFormateur.containsKey(id)) {
+                    String nom = result.getString("personne.nom");
+                    String prenom = result.getString("personne.prenom");
+                    boolean interne = result.getBoolean("formateur.interne");
+                    formateur = new Formateur(id, nom, prenom, interne);
+                }else{
+                    formateur = idToFormateur.get(id);
+                }
+
+                int idCreneau = result.getInt("creneauformateur.fk_creneau");
+                ICreneau creneau = new ProxyCreneau(idCreneau);
+                List<ICreneau> listTemp = formateur.getListCreneaux();
+                listTemp.add(creneau);
+                formateur.setListCreneaux(listTemp);
+
+                idToFormateur.put(id, formateur);
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
 
-        return listFormateur;
+        return new ArrayList<>(idToFormateur.values());
     }
 
     public Formateur insert(Formateur formateur){

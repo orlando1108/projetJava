@@ -13,4 +13,5 @@ public interface IStagiaire extends IPersonne{
     void setListCreneaux(List<ICreneau> listCreneaux);
     boolean isInterne();
     void setInterne(boolean interne);
+    String toString();
 }

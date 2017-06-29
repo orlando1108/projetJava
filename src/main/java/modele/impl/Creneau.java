@@ -7,6 +7,7 @@ import modele.intf.IFormation;
 import modele.intf.IStagiaire;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +97,15 @@ public class Creneau implements ICreneau{
 
     public void setListFormateurs(List<IFormateur> listFormateurs) {
         this.listFormateurs = listFormateurs;
+    }
+
+    @Override
+    public String toString() {
+        return "Creneau{" +
+                "id=" + id +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", formation=" + formation +
+                '}';
     }
 }

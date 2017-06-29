@@ -5,7 +5,7 @@ import dao.DAONames;
 import dao.intf.DAO;
 import modele.impl.Financement;
 import modele.intf.IFinancement;
-import modele.intf.IStagiaire;
+import modele.intf.IFinancementStagiaire;
 
 import java.util.List;
 
@@ -54,14 +54,19 @@ public class ProxyFinancement implements IFinancement{
     }
 
     @Override
-    public List<IStagiaire> getListStagiaires() {
+    public List<IFinancementStagiaire> getListFinancementsStagiaires() {
         this.getInstance();
-        return this.instance.getListStagiaires();
+        return this.instance.getListFinancementsStagiaires();
     }
 
     @Override
-    public void setListStagiaires(List<IStagiaire> listStagiaires) {
+    public void setListFinancementsStagiaires(List<IFinancementStagiaire> listStagiaires) {
         this.getInstance();
-        this.instance.setListStagiaires(listStagiaires);
+        this.instance.setListFinancementsStagiaires(listStagiaires);
+    }
+
+    public String toString(){
+        this.getInstance();
+        return this.instance.toString();
     }
 }

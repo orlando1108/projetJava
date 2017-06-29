@@ -2,11 +2,14 @@ package dao.impl.mysql;
 
 import dao.intf.SpecialiteDAO;
 import modele.impl.Specialite;
+import modele.intf.IFormation;
+import modele.proxy.ProxyFormation;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,7 +17,9 @@ import java.util.List;
  */
 public class SpecialiteDAOImpl extends DAOImpl<Specialite> implements SpecialiteDAO{
 
-    private final String selectQuery = "SELECT idSpecialite, nom, code FROM specialite";
+    private final String selectQuery = "" +
+            "SELECT specialite.idSpecialite, specialite.nom, specialite.code, formation.idFormation FROM specialite " +
+            "INNER JOIN formation ON formation.fk_specialite = specialite.idSpecialite";
     private final String insertQuery = "INSERT INTO specialite (nom, code) VALUES (?, ?)";
     private final String updateQuery = "UPDATE specialite SET nom = ?, code = ? WHERE idSpecialite = ?";
     private final String deleteQuery = "DELETE FROM specialite WHERE idSpecialite = ?";
@@ -29,9 +34,17 @@ public class SpecialiteDAOImpl extends DAOImpl<Specialite> implements Specialite
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
-                String nom = result.getString("nom");
-                String code = result.getString("code");
-                specialite = new Specialite(id, nom, code);
+                if(specialite == null) {
+                    String nom = result.getString("nom");
+                    String code = result.getString("code");
+                    specialite = new Specialite(id, nom, code);
+                }
+
+                int idFormation = result.getInt("formation.IdFormation");
+                IFormation formation = new ProxyFormation(idFormation);
+                List<IFormation> listTemp = specialite.getListFormations();
+                listTemp.add(formation);
+                specialite.setListFormations(listTemp);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -42,24 +55,33 @@ public class SpecialiteDAOImpl extends DAOImpl<Specialite> implements Specialite
 
     @Override
     public List<Specialite> findAll() {
-        ArrayList<Specialite> listeSpecialites = new ArrayList<>();
-
+        HashMap<Integer, Specialite> idToSpecialite= new HashMap<>();
         try (PreparedStatement stm = con.prepareStatement(this.selectQuery)){
             ResultSet result = stm.executeQuery();
 
             while (result.next()){
+                Specialite specialite;
                 int id = result.getInt("idSpecialite");
-                String nom = result.getString("nom");
-                String code = result.getString("code");
-
-                listeSpecialites.add(new Specialite(id, nom, code));
+                if(!idToSpecialite.containsKey(id)){
+                    String nom = result.getString("nom");
+                    String code = result.getString("code");
+                    specialite = new Specialite(id, nom, code);
+                }else{
+                    specialite = idToSpecialite.get(id);
+                }
+                int idFormation = result.getInt("formation.IdFormation");
+                IFormation formation = new ProxyFormation(idFormation);
+                List<IFormation> listTemp = specialite.getListFormations();
+                listTemp.add(formation);
+                specialite.setListFormations(listTemp);
+                idToSpecialite.put(id,specialite);
             }
         }catch (SQLException e){
             e.printStackTrace();
             return null;
         }
 
-        return listeSpecialites;
+        return new ArrayList<>(idToSpecialite.values());
     }
 
     @Override
