@@ -24,7 +24,7 @@ public class Creneautest {
 		
 		
 		String dateFin =  "2017-06-25 10:00";
-		String dateDebut =  "2017-06-25 13:00";
+		String dateDebut =  "2017-06-25 13:30";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime localDateDebut = LocalDateTime.parse(dateDebut, formatter);
 		LocalDateTime localDateFin = LocalDateTime.parse(dateFin, formatter);
@@ -78,7 +78,7 @@ public class Creneautest {
 	@Test(expected = ModelException.class)
 	public void testHeureDebutEstApresMonHeureFin() throws ModelException{
 		
-		String dateDebut =  "2017-06-25 14:00";
+		String dateDebut =  "2017-06-25 13:30";
 		String dateFin =  "2017-06-25 10:00";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime localDateDebut = LocalDateTime.parse(dateDebut, formatter);
@@ -91,7 +91,9 @@ public class Creneautest {
 		
 		Formation formation = new Formation(1,"Ma formation",specialite1,objectif);
 		Creneau creneau = new Creneau(1, localDateDebut, localDateFin, true, formation);
-	    assertEquals(creneau.getDateDebut(),localDateDebut);
+		creneau.setDateDebut(localDateDebut);
+		creneau.setDateFin(localDateFin);
+	    //assertEquals(creneau.getDateDebut(),localDateDebut);
 	}
 	
 	@Test
