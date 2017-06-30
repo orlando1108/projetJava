@@ -1,5 +1,6 @@
 package modele.impl;
 
+import modele.exception.ModelException;
 import modele.intf.IFinancement;
 import modele.intf.IFinancementStagiaire;
 import modele.intf.IStagiaire;
@@ -48,15 +49,24 @@ public class FinancementStagiaire implements IFinancementStagiaire {
         return dateDebut;
     }
 
-    public void setDateDebut(LocalDate dateDebut) {
+    public void setDateDebut(LocalDate dateDebut) throws ModelException {
+    	
+    	if(dateDebut.isAfter(this.dateFin) || dateDebut.equals(this.dateFin)){
+    		throw new ModelException("date de debut  invalide");
+    	}
         this.dateDebut = dateDebut;
+        
+        
     }
 
     public LocalDate getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(LocalDate dateFin) {
-        this.dateFin = dateFin;
+    public void setDateFin(LocalDate dateFin) throws ModelException {
+    	if(dateFin.isBefore(this.dateDebut) || dateFin.equals(this.dateDebut)){
+    		throw new ModelException("date de fin invalide");
+    	}
+    	this.dateFin = dateFin;
     }
 }

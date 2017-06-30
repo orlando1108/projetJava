@@ -1,11 +1,13 @@
 package modele.impl;
 
+import modele.exception.ModelException;
 import modele.impl.Formation;
 import modele.intf.ICreneau;
 import modele.intf.IFormateur;
 import modele.intf.IFormation;
 import modele.intf.IStagiaire;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -55,7 +57,11 @@ public class Creneau implements ICreneau{
         return dateDebut;
     }
 
-    public void setDateDebut(LocalDateTime dateDebut) {
+    public void setDateDebut(LocalDateTime dateDebut) throws ModelException {
+    	
+    	if(dateDebut.isAfter(this.dateFin) || dateDebut.equals(this.dateFin)){
+    		throw new ModelException("date de debut  invalide");
+    	}
         this.dateDebut = dateDebut;
     }
 
@@ -63,7 +69,11 @@ public class Creneau implements ICreneau{
         return dateFin;
     }
 
-    public void setDateFin(LocalDateTime dateFin) {
+    public void setDateFin(LocalDateTime dateFin) throws ModelException {
+    	if(dateFin.isBefore(this.dateDebut) || dateFin.equals(this.dateDebut)){
+    		throw new ModelException("date de fin invalide");
+    	}
+        
         this.dateFin = dateFin;
     }
 

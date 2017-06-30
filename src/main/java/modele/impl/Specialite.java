@@ -1,5 +1,6 @@
 package modele.impl;
 
+import modele.exception.ModelException;
 import modele.intf.IFormation;
 import modele.intf.ISpecialite;
 
@@ -28,7 +29,9 @@ public class Specialite implements ISpecialite {
         this.listFormations = new ArrayList<>();
     }
 
-    public int getId() {
+    public Specialite() {}
+
+	public int getId() {
         return id;
     }
 
@@ -48,7 +51,22 @@ public class Specialite implements ISpecialite {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code) throws ModelException{
+        
+        int longueur = code.length();
+        
+        if(longueur == 3 ){
+        	for(int i = 0; i<longueur ; i ++){
+        		if (Character.digit(code.charAt(i),10) == -1){
+        			throw new ModelException("Code invalide, contient des caractères non numérique");
+        		}
+        	}
+        	
+        }
+        else{
+        	throw new ModelException("code n'ayant pas 3 caractères");
+        }
+        
         this.code = code;
     }
 
