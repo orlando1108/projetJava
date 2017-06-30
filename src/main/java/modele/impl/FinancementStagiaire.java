@@ -33,7 +33,18 @@ public class FinancementStagiaire implements IFinancementStagiaire {
         return stagiaire;
     }
 
-    public void setStagiaire(IStagiaire stagiaire) {
+    public void setStagiaire(IStagiaire stagiaire) throws ModelException{
+    	
+    	for(IFinancementStagiaire  financementStg : stagiaire.getListFinancementsStagiaires()){
+    		
+    		if(!(financementStg.getDateDebut().isBefore(this.dateDebut) || financementStg.getDateDebut().isAfter(dateFin)&&
+    			 financementStg.getDateFin().isBefore(this.dateDebut) || financementStg.getDateFin().isAfter(this.dateFin))||
+    			 financementStg.getDateDebut().isEqual(this.dateDebut) && financementStg.getDateFin().isEqual(this.dateFin)  ){
+        		throw new ModelException("Deux creneaux se chevauchent");
+        	}
+    		
+    	}
+    
         this.stagiaire = stagiaire;
     }
 

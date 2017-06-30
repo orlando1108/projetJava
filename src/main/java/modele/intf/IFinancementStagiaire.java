@@ -10,7 +10,7 @@ import modele.exception.ModelException;
 public interface IFinancementStagiaire {
 
     IStagiaire getStagiaire();
-    void setStagiaire(IStagiaire stagiaire);
+    void setStagiaire(IStagiaire stagiaire)  throws ModelException;
     IFinancement getFinancement();
     void setFinancement(IFinancement financement);
     LocalDate getDateDebut();

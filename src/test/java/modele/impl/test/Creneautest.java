@@ -149,5 +149,34 @@ public class Creneautest {
 		creneau.setDateFin(localDateFin);
 		
 	}
-
+	
+/*	@Test
+	public void testCreneauQuiNeSeChevauchentPas(){
+		
+	}
+	
+	
+	@Test(expected = ModelException.class)
+	public void testCreneauQuiSeChevauchent(){
+		String dateDebut =  "2017-06-25 10:00";
+		String dateFin =  "2017-06-25 13:30";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime localDateDebut = LocalDateTime.parse(dateDebut, formatter);
+		LocalDateTime localDateFin = LocalDateTime.parse(dateFin, formatter);
+		Specialite specialite1 = new Specialite();
+		Objectif objectif = new Objectif ("mon objectif");
+		
+		Formation formation = new Formation(1,"Ma formation",specialite1,objectif);
+		Creneau creneau = new Creneau(1, localDateDebut, localDateFin, true, formation);
+		
+		String dateDebut2 =  "2017-06-25 11:00";
+		String dateFin2 =  "2017-06-25 14:30";
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime localDateDebut2 = LocalDateTime.parse(dateDebut2, formatter2);
+		LocalDateTime localDateFin2 = LocalDateTime.parse(dateFin2, formatter2);
+	
+		
+		Creneau creneau2 = new Creneau(1, localDateDebut2, localDateFin2, true, formation);
+	}
+*/
 }
