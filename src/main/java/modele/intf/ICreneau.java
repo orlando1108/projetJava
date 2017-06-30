@@ -20,7 +20,7 @@ public interface ICreneau {
     IFormation getFormation();
     void setFormation(IFormation formation);
     List<IStagiaire> getListStagiaires();
-    void setListStagiaires(List<IStagiaire> listStagiaires);
+    void setListStagiaires(List<IStagiaire> listStagiaires)throws ModelException;
     List<IFormateur> getListFormateurs();
-    void setListFormateurs(List<IFormateur> listFormateurs);
+    void setListFormateurs(List<IFormateur> listFormateurs)throws ModelException;
 }

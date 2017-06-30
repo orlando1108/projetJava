@@ -111,7 +111,19 @@ public class Creneau implements ICreneau {
 		return listStagiaires;
 	}
 
-	public void setListStagiaires(List<IStagiaire> listStagiaires) {
+	public void setListStagiaires(List<IStagiaire> listStagiaires) throws ModelException {
+		
+		for(IStagiaire stagiaire : listStagiaires){
+			for(ICreneau creneau : stagiaire.getListCreneaux()){
+				if(!(creneau.getDateDebut().isBefore(this.dateDebut) || creneau.getDateDebut().isAfter(dateFin)&&
+						creneau.getDateFin().isBefore(this.dateDebut) || creneau.getDateFin().isAfter(this.dateFin))||
+						creneau.getDateDebut().isEqual(this.dateDebut) && creneau.getDateFin().isEqual(this.dateFin)  ){
+		        		
+					throw new ModelException("Deux creneaux se chevauchent");
+		        	}
+			}
+		}
+		
 		this.listStagiaires = listStagiaires;
 	}
 
@@ -119,7 +131,18 @@ public class Creneau implements ICreneau {
 		return listFormateurs;
 	}
 
-	public void setListFormateurs(List<IFormateur> listFormateurs) {
+	public void setListFormateurs(List<IFormateur> listFormateurs) throws ModelException {
+		
+		for(IFormateur formateur : listFormateurs){
+			for(ICreneau creneau : formateur.getListCreneaux()){
+				if(!(creneau.getDateDebut().isBefore(this.dateDebut) || creneau.getDateDebut().isAfter(dateFin)&&
+						creneau.getDateFin().isBefore(this.dateDebut) || creneau.getDateFin().isAfter(this.dateFin))||
+						creneau.getDateDebut().isEqual(this.dateDebut) && creneau.getDateFin().isEqual(this.dateFin)  ){
+		        		
+					throw new ModelException("Deux creneaux se chevauchent");
+		        	}
+			}
+		}
 		this.listFormateurs = listFormateurs;
 	}
 

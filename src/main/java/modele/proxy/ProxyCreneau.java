@@ -26,7 +26,7 @@ public class ProxyCreneau implements ICreneau {
         this.instance = null;
     }
 
-    private void getInstance(){
+    private void getInstance() {
         if (instance == null) {
             DAO<Creneau> dao = DAOFactory.getDAO(DAONames.Creneau);
             this.instance = dao.findById(this.id);
@@ -99,7 +99,7 @@ public class ProxyCreneau implements ICreneau {
     }
 
     @Override
-    public void setListStagiaires(List<IStagiaire> listStagiaires) {
+    public void setListStagiaires(List<IStagiaire> listStagiaires)throws ModelException {
         this.getInstance();
         this.instance.setListStagiaires(listStagiaires);
     }
@@ -111,7 +111,7 @@ public class ProxyCreneau implements ICreneau {
     }
 
     @Override
-    public void setListFormateurs(List<IFormateur> listFormateurs) {
+    public void setListFormateurs(List<IFormateur> listFormateurs) throws ModelException {
         this.getInstance();
         this.instance.setListFormateurs(listFormateurs);
     }

@@ -129,6 +129,12 @@ public class FinancementStagiaireTest {
 		Financement financement2 = new Financement(2,"OTT");
 		FinancementStagiaire financementStagiaire2 = new FinancementStagiaire(stagiaire,financement2,localDateDebut2,localDateFin2);
 
+		List<IFinancementStagiaire> listFinancementsStagiaires = new ArrayList<>();
+		listFinancementsStagiaires.add(financementStagiaire);
+		//listFinancementsStagiaires.add(financementStagiaire2);
+		
+		stagiaire.setListFinancementsStagiaires(listFinancementsStagiaires);
+		
 		financementStagiaire2.setStagiaire(stagiaire);
 		assertTrue(true);
 		
